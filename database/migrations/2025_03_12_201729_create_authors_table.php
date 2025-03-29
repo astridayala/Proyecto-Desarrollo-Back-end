@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id('id');
-            $table->string('authorN_name');
+            $table->string('author_name');
             $table->timestamps();
         });
     }
