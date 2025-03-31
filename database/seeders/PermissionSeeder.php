@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PermissionSeeder extends Seeder
 {
@@ -14,78 +15,51 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        /**
-         * Create roles
-         */
+        // Crear roles
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $bibliotecario = Role::firstOrCreate(['name' => 'bibliotecario', 'guard_name' => 'web']);
         $usuario = Role::firstOrCreate(['name' => 'usuario', 'guard_name' => 'web']);
 
-        /**
-         * Create permissions
-         */
+        // Crear permisos
         $permissions = [
-            // Permisos para usuario
-            'ver catalogo',
-            'reservar libro',
-            'consultar estado de prestamos',
-            'devolver libro',
-            
-            // Permisos para bibliotecario
-            'gestionar libros', // CRUD libros
-            'gestionar reservas',
-            'gestionar prestamos',
-            'gestionar devoluciones',
-            'gestionar sanciones',
-            
-            // Permisos para administrador
-            'gestionar usuarios',
-            'asignar roles',
-            'configurar reglas de prestamo'
+            'ver libros',
+            'prestar libros',
+            'devolver libros',
+            'gestionar usuarios'
         ];
 
-        collect($permissions)->each(function ($permission) {
-            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
-        });
+        foreach ($permissions as $permiso) {
+            Permission::firstOrCreate(['name' => $permiso, 'guard_name' => 'web']);
+        }
 
-        /**
-         * Assign permissions to roles
-         */
-        $usuario->givePermissionTo(['ver catalogo', 'reservar libro', 'consultar estado de prestamos', 'devolver libro']);
-        
-        $bibliotecario->givePermissionTo(['gestionar libros', 'gestionar reservas', 'gestionar prestamos', 'gestionar devoluciones', 'gestionar sanciones']);
-        
-        $admin->givePermissionTo(Permission::all()); // Admin tiene todos los permisos
+        // Asignar permisos a roles
+        $admin->givePermissionTo(Permission::all());
+        $bibliotecario->givePermissionTo(['ver libros', 'prestar libros', 'devolver libros']);
+        $usuario->givePermissionTo('ver libros');
 
-        /**
-         * Create users
-         */
-        $adminUser = User::firstOrCreate([
+        // Crear usuarios de prueba
+        $userAdmin = User::firstOrCreate([
+            'name' => 'Administrador',
             'email' => 'admin@example.com',
-        ],[
-            'name' => 'Admin',
-            'password' => bcrypt('password'),
+            'telephone' => '123456789',
+            'password' => Hash::make('password'),
         ]);
+        $userAdmin->assignRole($admin);
 
-        $bibliotecarioUser = User::firstOrCreate([
-            'email' => 'bibliotecario@example.com',
-        ],[
+        $userBibliotecario = User::firstOrCreate([
             'name' => 'Bibliotecario',
-            'password' => bcrypt('password'),
+            'email' => 'biblio@example.com',
+            'telephone' => '987654321',
+            'password' => Hash::make('password'),
         ]);
+        $userBibliotecario->assignRole($bibliotecario);
 
-        $usuarioUser = User::firstOrCreate([
-            'email' => 'usuario@example.com',
-        ],[
-            'name' => 'Usuario',
-            'password' => bcrypt('password'),
+        $userNormal = User::firstOrCreate([
+            'name' => 'Usuario Normal',
+            'email' => 'user@example.com',
+            'telephone' => '555666777',
+            'password' => Hash::make('password'),
         ]);
-
-        /**
-         * Assign roles
-         */
-        $adminUser->assignRole($admin);
-        $bibliotecarioUser->assignRole($bibliotecario);
-        $usuarioUser->assignRole($usuario);
+        $userNormal->assignRole($usuario);
     }
 }
