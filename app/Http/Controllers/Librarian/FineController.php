@@ -22,4 +22,6 @@ class FineController extends Controller
 
         return response()->json(['message' => 'Penalty applied', 'data' => $fine], 200);
     }
+
+    //Quitar multa hace falta
 }

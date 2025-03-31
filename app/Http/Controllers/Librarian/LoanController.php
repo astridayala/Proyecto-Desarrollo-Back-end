@@ -22,4 +22,7 @@ class LoanController extends Controller
 
         return response()->json(['message' => 'Loan registered', 'data' => $loan], 200);
     }
+
+    //Desactivar prestamo hace falta
+    
 }
