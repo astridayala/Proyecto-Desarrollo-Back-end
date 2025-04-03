@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             BookSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
+            LoanSeeder::class,
         ]);
     }
 }
