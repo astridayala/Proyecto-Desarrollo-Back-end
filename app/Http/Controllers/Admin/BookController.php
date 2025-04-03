@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class BookController extends Controller
 {
     public function index()
     {
         $books = Book::all();
-
-        return response()->json(['data' => $books], 200);
+        return response()->json(['data' => BookResource::collection($books)], 200);
     }
 
     public function store(Request $request)
@@ -29,7 +28,10 @@ class BookController extends Controller
 
         $book = Book::create($validated);
 
-        return response()->json(['message' => 'Book added', 'data' => $book], 200);
+        return response()->json([
+            'message' => 'Book added',
+            'data' => new BookResource($book)
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -46,7 +48,10 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         $book->update($validated);
 
-        return response()->json(['message' => 'Book updated', 'data' => $book], 200);
+        return response()->json([
+            'message' => 'Book updated',
+            'data' => new BookResource($book)
+        ], 200);
     }
 
     public function destroy($id)
