@@ -34,11 +34,6 @@ class LoanStatusSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'loan_statu_name' => 'Cancelado',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
         ]);
     }
 }

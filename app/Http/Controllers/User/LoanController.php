@@ -30,7 +30,7 @@ class LoanController extends Controller
             'book_id' => $validated['idBook'],
             'date_start_loan' => now(),
             'date_end_loan' => now()->addWeeks(2),
-            'loanStatus_id' => 1, // Assume 1 is the status for active loans
+            'loanStatus_id' => 1,
         ]);
 
         return response()->json(['message' => 'Loan submitted', 'data' => $loan], 200);

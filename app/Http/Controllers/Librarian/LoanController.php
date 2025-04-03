@@ -22,23 +22,4 @@ class LoanController extends Controller
 
         return response()->json(['message' => 'Loan registered', 'data' => $loan], 200);
     }
-
-    public function cancel(string $id): JsonResponse
-    {
-        $loan = Loan::find($id);
-
-        if (!$loan) {
-            return response()->json(['message' => 'Loan not found'], 404);
-        }
-
-        if ($loan->returned_at !== null) {
-            return response()->json(['message' => 'Loan already returned'], 400);
-        }
-
-        $loan->returned_at = now();
-        $loan->save();
-
-        return response()->json(['message' => 'Loan cancelled'], 200);
-    }
-    
 }
