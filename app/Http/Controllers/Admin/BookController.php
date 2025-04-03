@@ -5,9 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class BookController extends Controller
 {
+    public function index()
+    {
+        $books = Book::all();
+
+        return response()->json(['data' => $books], 200);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

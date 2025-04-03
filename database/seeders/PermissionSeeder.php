@@ -16,7 +16,7 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         // Crear roles
-        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $admin = Role::firstOrCreate(['name' => 'admin','guard_name' => 'web']);
         $bibliotecario = Role::firstOrCreate(['name' => 'bibliotecario', 'guard_name' => 'web']);
         $usuario = Role::firstOrCreate(['name' => 'usuario', 'guard_name' => 'web']);
 
@@ -39,27 +39,33 @@ class PermissionSeeder extends Seeder
 
         // Crear usuarios de prueba
         $userAdmin = User::firstOrCreate([
-            'name' => 'Administrador',
-            'email' => 'admin@example.com',
-            'telephone' => '123456789',
+            'name' => 'Ricardo Cubias',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
+            'telephone' => '123456789'
         ]);
         $userAdmin->assignRole($admin);
+        $adminToken = $userAdmin->createToken('admin-token')->plainTextToken;
+        $this->command->info('Admin Token: ' . $adminToken);
 
         $userBibliotecario = User::firstOrCreate([
-            'name' => 'Bibliotecario',
-            'email' => 'biblio@example.com',
-            'telephone' => '987654321',
+            'name' => 'Marjorie Monson',
+            'email' => 'bibliotecario@gmail.com',
             'password' => Hash::make('password'),
+            'telephone' => '987654321'
         ]);
         $userBibliotecario->assignRole($bibliotecario);
+        $bibliotecarioToken = $userBibliotecario->createToken('bibliotecario-token')->plainTextToken; 
+        $this->command->info('Bibliotecario Token: ' . $bibliotecarioToken);
 
         $userNormal = User::firstOrCreate([
-            'name' => 'Usuario Normal',
-            'email' => 'user@example.com',
-            'telephone' => '555666777',
+            'name' => 'Daniela Guardado',
+            'email' => 'user@gmail.com',
             'password' => Hash::make('password'),
+            'telephone' => '112233445'
         ]);
         $userNormal->assignRole($usuario);
+        $regularToken = $userNormal->createToken('user-token')->plainTextToken; 
+        $this->command->info('User Token: ' . $regularToken);
     }
 }
